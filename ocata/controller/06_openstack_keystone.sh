@@ -1,3 +1,4 @@
+#!/bin/bash
 ADMIN_TOKEN="406088b3e19f7131ebd4"
 MARIADB_PASSWORD="openstack"
 KEYSTONE_DB_PASSWORD="openstack"
@@ -12,7 +13,7 @@ function assert_superuser {
 
 function create_keystone_database
 {
-	mysql -u root "-p${MARIADB_PASSWORD}" < "/home/openstack/ocata/controller/sql/keystone.sql"
+	mysql -u root "-p${MARIADB_PASSWORD}" < "/home/openstack/OpenStack-Ocata/ocata/controller/sql/keystone.sql"
 }
 
 function install_keystone
@@ -22,7 +23,7 @@ function install_keystone
 
 function config_keystone
 {
-	cp "/home/openstack/ocata/controller/config/keystone.conf" "/etc/keystone/keystone.conf"
+	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/keystone.conf" "/etc/keystone/keystone.conf"
 }
 
 function connect_database
@@ -47,7 +48,7 @@ function bootstrap_keystone
 
 function config_apache
 {
-	cp "/home/openstack/ocata/controller/config/apache2.conf" "/etc/apache2/apache2.conf"
+	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/apache2.conf" "/etc/apache2/apache2.conf"
 }
 
 function restart_apache_service
@@ -68,25 +69,48 @@ function create_auth_user_and_role
 	export OS_USER_DOMAIN_NAME=Default
 	export OS_PROJECT_DOMAIN_NAME=Default
 	export OS_AUTH_URL=http://10.0.0.4:35357/v3
-	export OS_IDENTITY_API_VERSION=3
+	export OS_IDENTITY_API_VERSION="3"
 
 	openstack project create --domain default \
 	  --description "Service Project" service
 
+	openstack project create --domain default \
+	  --description "Demo Project" demo
+
+	openstack user create --domain default \
+	  --password-prompt demo
+
+	openstack role create user
+}
+
+function verify_operation
+{
+	 unset OS_AUTH_URL OS_PASSWORD
+	openstack --os-auth-url http://10.0.0.4:35357/v3 \
+	  --os-project-domain-name default --os-user-domain-name default \
+	  --os-project-name admin --os-username admin token issue
+
+	openstack --os-auth-url http://10.0.0.4:5000/v3 \
+	  --os-project-domain-name default --os-user-domain-name default \
+	  --os-project-name demo --os-username demo token issue
 }
 
 function main
 {
-	assert_superuser
+#	assert_superuser
 #	create_keystone_database
 #	install_keystone
 #	config_keystone
 #	connect_database
 #	initializate_fernet
-	bootstrap_keystone
-	config_apache
+#	bootstrap_keystone
+#	config_apache
 
 #	create_auth_user_and_role
+#	verify_operation
+	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
+
+	openstack token issue
 }
 
 main

@@ -11,7 +11,7 @@ function install_mariadb
 
 function config_mariadb
 {
-	cp "/home/openstack/ocata/controller/config/99-openstack.cnf" "/etc/mysql/mariadb.conf.d/99-openstack.cnf"
+	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/99-openstack.cnf" "/etc/mysql/mariadb.conf.d/99-openstack.cnf"
 }
 
 function main

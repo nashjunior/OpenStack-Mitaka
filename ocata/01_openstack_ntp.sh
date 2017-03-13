@@ -6,7 +6,7 @@ function assert_superuser {
 
 function config_chrony_server
 {
-	cp "/home/openstack/ocata/conf/chrony.conf" "/etc/chrony/chrony.conf"
+	cp "/home/openstack/OpenStack-Ocata/ocata/config/chrony.conf" "/etc/chrony/chrony.conf"
 
 }
 
@@ -23,8 +23,8 @@ function restart_chrony
 
 function main
 {
-	assert_superuses
-	apt-get install -y chrony
+	assert_superuser
+#	apt-get install -y chrony
 	config_chrony_server
 	config_chrony_client
 	restart_chrony

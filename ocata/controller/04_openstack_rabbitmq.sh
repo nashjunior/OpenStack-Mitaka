@@ -15,6 +15,6 @@ function main
 
 	rabbitmq-plugins enable rabbitmq_mqtt
 	rabbitmq-plugins enable rabbitmq_management
-]
+}
 
 main
