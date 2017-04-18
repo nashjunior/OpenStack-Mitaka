@@ -24,7 +24,7 @@ function restart_chrony
 function main
 {
 	assert_superuser
-#	apt-get install -y chrony
+	apt-get install -y chrony
 	config_chrony_server
 	config_chrony_client
 	restart_chrony

@@ -97,20 +97,20 @@ function verify_operation
 
 function main
 {
-#	assert_superuser
-#	create_keystone_database
-#	install_keystone
-#	config_keystone
-#	connect_database
-#	initializate_fernet
-#	bootstrap_keystone
-#	config_apache
+	assert_superuser
+	create_keystone_database
+	install_keystone
+	config_keystone
+	connect_database
+	initializate_fernet
+	bootstrap_keystone
+	config_apache
 
 #	create_auth_user_and_role
 #	verify_operation
-	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
+#	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
 
-	openstack token issue
+#	openstack token issue
 }
 
 main
