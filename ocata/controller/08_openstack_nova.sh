@@ -28,9 +28,9 @@ function register_in_keystone
 	openstack user create --domain default --password-prompt placement
 	openstack role add --project service --user placement admin
 	openstack service create --name placement --description "Placement API" placement
-	openstack endpoint create --region RegionOne placement public http://controller/placement
-	openstack endpoint create --region RegionOne placement internal http://controller/placement
-	openstack endpoint create --region RegionOne placement admin http://controller/placement
+	openstack endpoint create --region RegionOne placement public http://10.0.0.4/placement
+	openstack endpoint create --region RegionOne placement internal http://10.0.0.4/placement
+	openstack endpoint create --region RegionOne placement admin http://10.0.0.4/placement
 
 }
 
@@ -41,10 +41,10 @@ function install_nova_packages
 
 function connect_database
 {
-#	su -s /bin/sh -c "nova-manage api_db sync" nova
-#	su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
-#	su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova 109e1d4b-536a-40d0-83c6-5f121b82b650
-#	su -s /bin/sh -c "nova-manage db sync" nova
+	su -s /bin/sh -c "nova-manage api_db sync" nova
+	su -s /bin/sh -c "nova-manage cell_v2 map_cell0" nova
+	su -s /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose" nova 109e1d4b-536a-40d0-83c6-5f121b82b650
+	su -s /bin/sh -c "nova-manage db sync" nova
 	nova-manage cell_v2 list_cells
 }
 
@@ -57,15 +57,27 @@ function restart_services
 	service nova-novncproxy restart
 }
 
+function verify_operation
+{
+	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
+#	openstack hypervisor list
+#	su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
+	openstack compute service list
+	openstack catalog list
+	openstack image list
+
+}
+
 function main
 {
-	assert_superuser
-	create_nova_database
+#	assert_superuser
+#	create_nova_database
 #	register_in_keystone
 #	install_nova_packages
 #	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/nova.conf" "/etc/nova/nova.conf"
 #	connect_database
 #	restart_services
+	verify_operation
 }
 
 main
