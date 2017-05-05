@@ -63,8 +63,8 @@ function verify_operation
 
 function main
 {
-	assert_superuser
-	create_glance_database
+#	assert_superuser
+#	create_glance_database
 #	register_in_keystone
 
 #	apt install -y glance
@@ -72,7 +72,7 @@ function main
 #	su -s /bin/sh -c "glance-manage db_sync" glance
 #	restart_services
 
-#	verify_operation
+	verify_operation
 }
 
 main

@@ -25,7 +25,7 @@ function register_in_keystone
 
 function install_neutron_packages
 {
-	apt install -y neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-dhcp-agent neutron-metadata-agent
+	apt install -y neutron-server neutron-plugin-ml2 neutron-linuxbridge-agent neutron-l3-agent neutron-dhcp-agent neutron-metadata-agent
 }
 
 function config_neutron
@@ -52,14 +52,22 @@ function restart_services
 	service neutron-l3-agent restart
 }
 
+function verify_operation
+{
+	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
+	openstack extension list --network
+	openstack network agent list
+}
+
 function main
 {
-	assert_superuser
+#	assert_superuser
 #	create_neutron_database
-	#register_in_keystone
+#	register_in_keystone
 #	install_neutron_packages
 #	config_neutron
-	restart_services
+#	restart_services
+	verify_operation
 }
 
 main
