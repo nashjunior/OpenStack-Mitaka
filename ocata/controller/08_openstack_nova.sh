@@ -16,22 +16,17 @@ function register_in_keystone
 	 . "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
 	openstack user create --domain default --password-prompt nova
 	openstack role add --project service --user nova admin
-	openstack service create --name nova \
-	  --description "OpenStack Compute" compute
-	 openstack endpoint create --region RegionOne \
-	  compute public http://10.0.0.4:8774/v2.1
-	openstack endpoint create --region RegionOne \
-	  compute internal http://10.0.0.4:8774/v2.1
-	openstack endpoint create --region RegionOne \
-	  compute admin http://10.0.0.4:8774/v2.1
+	openstack service create --name nova --description "OpenStack Compute" compute
+	openstack endpoint create --region RegionOne compute public http://10.0.0.4:8774/v2.1
+	openstack endpoint create --region RegionOne compute internal http://10.0.0.4:8774/v2.1
+	openstack endpoint create --region RegionOne compute admin http://10.0.0.4:8774/v2.1
 
 	openstack user create --domain default --password-prompt placement
 	openstack role add --project service --user placement admin
 	openstack service create --name placement --description "Placement API" placement
-	openstack endpoint create --region RegionOne placement public http://10.0.0.4/placement
-	openstack endpoint create --region RegionOne placement internal http://10.0.0.4/placement
-	openstack endpoint create --region RegionOne placement admin http://10.0.0.4/placement
-
+	openstack endpoint create --region RegionOne placement public http://10.0.0.4:8778
+	openstack endpoint create --region RegionOne placement internal http://10.0.0.4:8778
+	openstack endpoint create --region RegionOne placement admin http://10.0.0.4:8778
 }
 
 function install_nova_packages
@@ -60,8 +55,8 @@ function restart_services
 function verify_operation
 {
 	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
-#	openstack hypervisor list
-#	su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
+	openstack hypervisor list
+	su -s /bin/sh -c "nova-manage cell_v2 discover_hosts --verbose" nova
 	openstack compute service list
 	openstack catalog list
 	openstack image list
@@ -70,14 +65,14 @@ function verify_operation
 
 function main
 {
-#	assert_superuser
+	assert_superuser
 #	create_nova_database
 #	register_in_keystone
 #	install_nova_packages
 #	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/nova.conf" "/etc/nova/nova.conf"
 #	connect_database
-#	restart_services
-	verify_operation
+	restart_services
+#	verify_operation
 }
 
 main

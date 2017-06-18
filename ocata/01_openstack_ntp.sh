@@ -12,7 +12,7 @@ function config_chrony_server
 
 function config_chrony_client
 {
-	cp "/home/compute1/ocata/conf/chrony.conf" "/etc/chrony/chrony.conf"
+	cp "/home/compute1/OpenStack-Ocata/ocata/config/chrony.conf" "/etc/chrony/chrony.conf"
 
 }
 

@@ -7,10 +7,12 @@ function assert_superuser {
 function main
 {
 	assert_superuser
+	ufw disable
 	apt install software-properties-common
 	add-apt-repository cloud-archive:ocata
 	apt update && apt -y dist-upgrade
 	apt install -y python-openstackclient
+	reboot
 }
 
 main

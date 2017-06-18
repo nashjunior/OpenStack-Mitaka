@@ -22,14 +22,10 @@ function register_in_keystone
 	 . "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"	
 	 openstack user create --domain default --password-prompt glance
 	 openstack role add --project service --user glance admin
-	 openstack service create --name glance \
-	  --description "OpenStack Image" image
-	 openstack endpoint create --region RegionOne \
-	  image public http://10.0.0.4:9292
-	openstack endpoint create --region RegionOne \
-	  image internal http://10.0.0.4:9292
-	openstack endpoint create --region RegionOne \
-	  image admin http://10.0.0.4:9292
+	 openstack service create --name glance --description "OpenStack Image" image
+	 openstack endpoint create --region RegionOne image public http://10.0.0.4:9292
+ 	 openstack endpoint create --region RegionOne image internal http://10.0.0.4:9292
+	 openstack endpoint create --region RegionOne image admin http://10.0.0.4:9292
 }
 
 function configure_glance
@@ -52,13 +48,10 @@ function remove_if_exists {
 function verify_operation
 {
 	 . "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
-	wget -P /tmp http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
-	openstack image create "cirros" \
-	  --file /tmp/cirros-0.3.5-x86_64-disk.img \
-	  --disk-format qcow2 --container-format bare \
-	  --public
-
+	wget http://download.cirros-cloud.net/0.3.5/cirros-0.3.5-x86_64-disk.img
+	openstack image create "cirros" --file cirros-0.3.5-x86_64-disk.img --disk-format qcow2 --container-format bare --public
 	openstack image list
+	rm  cirros-0.3.5-x86_64-disk.img
 }
 
 function main

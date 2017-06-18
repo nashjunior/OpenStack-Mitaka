@@ -39,16 +39,13 @@ function initializate_fernet
 
 function bootstrap_keystone
 {
-	keystone-manage bootstrap --bootstrap-password openstack \
-  --bootstrap-admin-url http://10.0.0.4:35357/v3/ \
-  --bootstrap-internal-url http://10.0.0.4:5000/v3/ \
-  --bootstrap-public-url http://10.0.0.4:5000/v3/ \
-  --bootstrap-region-id RegionOne
+	keystone-manage bootstrap --bootstrap-password openstack --bootstrap-admin-url http://10.0.0.4:35357/v3/ --bootstrap-internal-url http://10.0.0.4:5000/v3/ --bootstrap-public-url http://10.0.0.4:5000/v3/ --bootstrap-region-id RegionOne
 }
 
 function config_apache
 {
 	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/apache2.conf" "/etc/apache2/apache2.conf"
+	restart_apache_service
 }
 
 function restart_apache_service
@@ -69,27 +66,26 @@ function create_auth_user_and_role
 	export OS_USER_DOMAIN_NAME=Default
 	export OS_PROJECT_DOMAIN_NAME=Default
 	export OS_AUTH_URL=http://10.0.0.4:35357/v3
-	export OS_IDENTITY_API_VERSION="3"
+	export OS_IDENTITY_API_VERSION=3
 
-	openstack project create --domain default \
-	  --description "Service Project" service
+	openstack project create --domain default --description "Service Project" service
 
-	openstack project create --domain default \
-	  --description "Demo Project" demo
+	openstack project create --domain default --description "Demo Project" demo
 
-	openstack user create --domain default \
-	  --password-prompt demo
+#	openstack user create --domain default --password-prompt demo
 
-	openstack role create user
+#	openstack role create user
+
+	openstack role add --project demo --user demo user
 }
 
 function verify_operation
 {
-	 unset OS_AUTH_URL OS_PASSWORD
-	openstack --os-auth-url http://10.0.0.4:35357/v3 \
+	unset OS_AUTH_URL OS_PASSWORD
+	 openstack --os-auth-url http://10.0.0.4:35357/v3 \
 	  --os-project-domain-name default --os-user-domain-name default \
 	  --os-project-name admin --os-username admin token issue
-
+	
 	openstack --os-auth-url http://10.0.0.4:5000/v3 \
 	  --os-project-domain-name default --os-user-domain-name default \
 	  --os-project-name demo --os-username demo token issue
@@ -106,8 +102,8 @@ function main
 #	bootstrap_keystone
 #	config_apache
 
-	create_auth_user_and_role
-	verify_operation
+#	create_auth_user_and_role
+#	verify_operation
 	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
 
 	openstack token issue
