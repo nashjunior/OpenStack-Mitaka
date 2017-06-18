@@ -24,6 +24,8 @@ function install_keystone
 function config_keystone
 {
 	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/keystone.conf" "/etc/keystone/keystone.conf"
+	cp "/home/openstack/OpenStack-Ocata/ocata/controller/config/keystone-paste.ini" "/etc/keystone/keystone-paste.ini"
+
 }
 
 function connect_database
@@ -69,13 +71,9 @@ function create_auth_user_and_role
 	export OS_IDENTITY_API_VERSION=3
 
 	openstack project create --domain default --description "Service Project" service
-
 	openstack project create --domain default --description "Demo Project" demo
-
 #	openstack user create --domain default --password-prompt demo
-
 #	openstack role create user
-
 	openstack role add --project demo --user demo user
 }
 
@@ -101,11 +99,9 @@ function main
 #	initializate_fernet
 #	bootstrap_keystone
 #	config_apache
-
 #	create_auth_user_and_role
 #	verify_operation
 	. "/home/openstack/OpenStack-Ocata/ocata/controller/admin-demo/admin-openrc"
-
 	openstack token issue
 }
 
